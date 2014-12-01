@@ -1,0 +1,158 @@
+@import url(http://fonts.googleapis.com/css?family=Permanent+Marker);
+
+* {
+	font-family: 'Permanent Marker', cursive;
+}
+
+h1 {
+	margin: 10px;
+}
+
+#newuser {
+	display: none;
+}
+
+#game {
+	display: none;
+}
+
+#stat {
+	margin-bottom: 4px;
+}
+
+#stat article {
+	position: relative;
+	display: inline-block;
+	border: 2px solid black;
+	text-align: center;
+}
+
+#stat article p {
+	margin: 0;
+}
+
+#stat .big {
+	border-bottom: 0;
+	width: 302px;
+	display: block;
+}
+
+#stat .sml {
+	width: 150px;
+	border-left: 0;
+}
+
+#stat .first {
+	border-left: 2px solid black;
+}
+
+#tabs {
+	clear: both;
+}
+
+#tabs article {
+	width: 100px;
+	padding: 2px;
+	border: 2px solid black;
+	border-bottom: 0;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+}
+
+#tabs .sel {
+	background: black;
+	color: white;
+}
+
+.main {
+	float: left;
+	border: 1px solid black;
+}
+
+.main article {
+	text-align: center;
+	display: block;
+	border: 1px solid black;
+	width: 575px;
+}
+
+.main article p {
+	display: inline-block;
+	margin: 5px;
+	padding: 0;
+}
+
+.main article button {
+	display: inline-block;
+	margin: 5px;
+	padding: 0;
+}
+
+#mats {
+	display: block;
+}
+
+#mats article p {
+	width: 125px;
+}
+
+#mats article button {
+
+}
+
+#mats article button p {
+	display: block;
+	margin: 0;
+	padding: 0;
+	vertical-align: middle;
+	text-align: center;
+}
+
+#locs {
+	display: none;
+}
+
+#locs article p {
+	width: 400px;
+}
+
+#locs article button {
+	width: 100px;
+}
+
+#upgs {
+	display: none;
+}
+
+#upgs article p {
+	width: 200px;
+}
+
+#upgs article button {
+	width: 50px;
+}
+
+#bank {
+	display: none;
+}
+
+#bank article p {
+	width: 200px;
+}
+
+#bank article button {
+	width: 50px;
+}
+
+#sets {
+	display: none;
+}
+
+#sets article p {
+	width: 350px;
+}
+
+#sets article button {
+	width: 150px;
+}
