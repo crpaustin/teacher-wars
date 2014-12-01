@@ -12,6 +12,18 @@ h1 {
 	display: none;
 }
 
+#popup {
+	position: absolute;
+	width: 150px;
+	background: #bbb;
+	border: 1px solid black;
+	top: 15px;
+	right: 15px;
+	text-align: center;
+	opacity: 0.0;
+	display: none;
+}
+
 #game {
 	display: none;
 }

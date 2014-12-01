@@ -29,6 +29,51 @@ $(document).ready(function(){
 			default: $('#mats').css('display','block'); break;
 		}
 	});
+	// **POPUP FUNCTION
+	function popup(text) {
+		text = text || 'POPUP';
+		$('#popup p').html(text);
+		$('#popup').css('opacity','1.0');
+		$('#popup').css('display','block');
+		setTimeout(function(){
+			var opa = 1.00;
+			var opaTimer = setInterval(function(){
+				if(opa > 0) {
+					opa -= 0.01;
+					$('#popup').css('opacity',String(opa));
+				} else {
+					$('#popup').css('opacity','0.0');
+					$('#popup').css('display','none');
+					clearInterval(opaTimer);
+				}
+			}, 20);
+		}, 1000);
+	}
+	// **STAT SET LOOP
+	var update = setInterval(function(){
+		var dName = $('article#name p').html().split(': ');
+		var dLocation = $('article#location p').html().split(': ');
+		var dMoney = $('article#money p').html().split(': $');
+		var dDay = $('article#day p').html().split(': ');
+		$.ajax({
+			url: 'update.php',
+			type: 'post',
+			data: {
+				user: dName[1],
+				location: dLocation[1],
+				money: dMoney[1],
+				day: dDay[1]
+			},
+			success: function(data,status) {
+				//popup('Random Save!');
+				//console.log(data);
+			}
+		});
+	}, 5000);
+	// **BUY STUFF
+	$('.buy').click(function(){
+		
+	});
 	// **RESET GAME
 	$('#sets .reset').click(function(){
 		// send a request to reset.php
@@ -36,6 +81,7 @@ $(document).ready(function(){
 		$.ajax({
 			url: 'reset.php',
 			success: function(data,status) {
+				// refresh page
 				location.reload();
 			}
 		});

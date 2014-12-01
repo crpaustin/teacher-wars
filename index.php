@@ -25,6 +25,9 @@ if(isset($_COOKIE['user'])) {
 		// TODO: START A NEW GAME
 	}
 	?>
+	<div id="popup">
+		<p>Game Saved!</p>
+	</div>
 	<div id="newuser">
 		<form action="newuser.php" method="post">
 			<input type="text" maxlength="25" placeholder="Your Name" name="name">
@@ -33,15 +36,15 @@ if(isset($_COOKIE['user'])) {
 	</div>
 	<div id="game">
 		<div id="stat">
-			<article class="big"
+			<article id="name" class="big"
 				><p>Name: <?php echo $_COOKIE['user'] ?></p></article
-			><article class="big"
+			><article id="location" class="big"
 				><p>Location: <?php echo $stat['location'] ?></p
 			></article
-			><article class="sml first"
+			><article id="money" class="sml first"
 				><p>Money: $<?php echo $stat['money'] ?></p
 			></article
-			><article class="sml"
+			><article id="day" class="sml"
 				><p>Day: <?php echo $stat['day'] ?></p
 			></article>
 		</div>
@@ -56,20 +59,20 @@ if(isset($_COOKIE['user'])) {
 			<article>
 				<p>Paper</p>
 				<p>Count: 2</p>
-				<button type="button"><p>Buy 1</p><p>Price: 1</p></button>
-				<button type="button"><p>Sell 1</p><p>Price: 1</p></button>
+				<button class="buy" type="button"><p>Buy 1</p><p>Price: 1</p></button>
+				<button class="sell" type="button"><p>Sell 1</p><p>Price: 1</p></button>
 			</article>
 			<article>
 				<p>Pencils</p>
 				<p>Count: 1</p>
-				<button type="button"><p>Buy 1</p><p>Price: 5</p></button>
-				<button type="button"><p>Sell 1</p><p>Price: 2</p></button>
+				<button class="buy" type="button"><p>Buy 1</p><p>Price: 5</p></button>
+				<button class="sell" type="button"><p>Sell 1</p><p>Price: 2</p></button>
 			</article>
 			<article>
 				<p>Pens</p>
 				<p>Count: 0</p>
-				<button type="button"><p>Buy 1</p><p>Price: 50</p></button>
-				<button type="button"><p>Sell 1</p><p>Price: 20</p></button>
+				<button class="buy" type="button"><p>Buy 1</p><p>Price: 50</p></button>
+				<button class="sell" type="button"><p>Sell 1</p><p>Price: 20</p></button>
 			</article>
 		</div>
 		<div class="main" id="locs">
