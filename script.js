@@ -55,6 +55,15 @@ $(document).ready(function(){
 		var dLocation = $('article#location p').html().split(': ');
 		var dMoney = $('article#money p').html().split(': $');
 		var dDay = $('article#day p').html().split(': ');
+		var dDebt = $('article#debt p').html().split(': $');
+		var dRespect = $('article#respect p').html().split(': ');
+		var dCounts = [];
+		$('article .text p:last-child').each(function(){
+			dCounts[dCounts.length] = $(this).html().split(': ')[1];
+		});
+		while(dCounts.length < 6) {
+			dCounts[dCounts.length] = 0;
+		}
 		$.ajax({
 			url: 'update.php',
 			type: 'post',
@@ -62,7 +71,10 @@ $(document).ready(function(){
 				user: dName[1],
 				location: dLocation[1],
 				money: dMoney[1],
-				day: dDay[1]
+				day: dDay[1],
+				debt: dDebt[1],
+				respect: dRespect[1],
+				counts: dCounts
 			},
 			success: function(data,status) {
 				//popup('Random Save!');
@@ -72,7 +84,8 @@ $(document).ready(function(){
 	}, 5000);
 	// **BUY STUFF
 	$('.buy').click(function(){
-		
+		var amount = $(this).attr('num');
+		var price = $(this).attr('price');
 	});
 	// **RESET GAME
 	$('#sets .reset').click(function(){

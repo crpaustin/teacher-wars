@@ -5,6 +5,7 @@ if(isset($_COOKIE['user'])) {
 	setcookie('stat',$_COOKIE['stat'],time()+(3600*24*30),'/');
 	$stat = stripslashes($_COOKIE['stat']);
 	$stat = json_decode($stat, true);
+	$counts = $stat['counts'];
 } else {
 	echo '<aside user="new"></aside>';
 }
@@ -19,6 +20,7 @@ if(isset($_COOKIE['user'])) {
 <body lang="en">
 	<h1>Teacher Wars</h1>
 	<?php
+	require('functions.php');
 	if(isset($_COOKIE['user'])) {
 		// TODO: LOAD STUFF
 	} else {
@@ -46,6 +48,12 @@ if(isset($_COOKIE['user'])) {
 			></article
 			><article id="day" class="sml"
 				><p>Day: <?php echo $stat['day'] ?></p
+			></article
+			><br><article id="debt" class="newl sml first"
+				><p>Debt: $<?php echo $stat['debt'] ?></p
+			></article
+			><article id="respect" class="newl sml"
+				><p>Respect: <?php echo $stat['respect'] ?></p
 			></article>
 		</div>
 		<nav id="tabs">
@@ -56,24 +64,25 @@ if(isset($_COOKIE['user'])) {
 			<article>Settings</article>
 		</nav>
 		<div class="main" id="mats">
-			<article>
-				<p>Paper</p>
-				<p>Count: 2</p>
-				<button class="buy" type="button"><p>Buy 1</p><p>Price: 1</p></button>
-				<button class="sell" type="button"><p>Sell 1</p><p>Price: 1</p></button>
-			</article>
-			<article>
-				<p>Pencils</p>
-				<p>Count: 1</p>
-				<button class="buy" type="button"><p>Buy 1</p><p>Price: 5</p></button>
-				<button class="sell" type="button"><p>Sell 1</p><p>Price: 2</p></button>
-			</article>
-			<article>
-				<p>Pens</p>
-				<p>Count: 0</p>
-				<button class="buy" type="button"><p>Buy 1</p><p>Price: 50</p></button>
-				<button class="sell" type="button"><p>Sell 1</p><p>Price: 20</p></button>
-			</article>
+			<?php
+			// TEMP VAR - Number of unlocks
+			$unlocks = 3;
+			// TEMP VAR - Prices
+			$prices_b = array(4,8,16,32,64,128);
+			$prices_s = array(1,2,4,8,16,32);
+			for($i=0;$i<$unlocks;$i++) {
+				echo '<article>';
+				echo '<nav class="text">';
+				echo '<p>'.getUnlock($i).'</p>';
+				echo '<p>Count: '.$counts[$i].'</p>';
+				echo '</nav>';
+				echo '<nav class="prices">';
+				for($j=0;$j<3;$j++){echo '<button class="buy" num="'.pow(10,$j).'" price="'.($prices_b[$i]*pow(10,$j)).'" type="button"><p>Buy '.pow(10,$j).'</p><p>Price: '.numCon($prices_b[$i]*pow(10,$j)).'</p></button>';}
+				for($j=0;$j<3;$j++){echo '<button class="sell" num="'.pow(10,$j).'" price="'.($prices_s[$i]*pow(10,$j)).'" type="button"><p>Sell '.pow(10,$j).'</p><p>Price: '.numCon($prices_s[$i]*pow(10,$j)).'</p></button>';}
+				echo '</nav>';
+				echo '</article>';
+			}
+			?>
 		</div>
 		<div class="main" id="locs">
 			<article>
@@ -100,21 +109,18 @@ if(isset($_COOKIE['user'])) {
 		</div>
 		<div class="main" id="bank">
 			<article>
-				<p>Debt: $203</p>
-			</article>
-			<article>
 				<p>Borrow Money</p>
 				<button class="button">$1</button>
 				<button class="button">$10</button>
 				<button class="button">$100</button>
-				<button class="button">$1000</button>
+				<button class="button">$1,000</button>
 			</article>
 			<article>
 				<p>Pay Debt</p>
 				<button class="button">$1</button>
 				<button class="button">$10</button>
 				<button class="button">$100</button>
-				<button class="button">$1000</button>
+				<button class="button">$1,000</button>
 			</article>
 		</div>
 		<div class="main" id="sets">
