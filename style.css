@@ -13,7 +13,7 @@ h1 {
 }
 
 #popup {
-	position: absolute;
+	position: fixed;
 	width: 150px;
 	background: #bbb;
 	border: 1px solid black;
@@ -22,6 +22,54 @@ h1 {
 	text-align: center;
 	opacity: 0.0;
 	display: none;
+}
+
+#event {
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.4);
+	z-index: 9;
+	display: none;
+}
+
+#event article {
+	position: fixed;
+	width: 400px;
+	left: 89px;
+	top: 189px;
+	border: 1px solid black;
+	padding: 16px;
+	background: white;
+	z-index: 10;
+}
+
+#event aside {
+	position: absolute;
+	width: 20px;
+	text-align: center;
+	top: 8px;
+	right: 14px;
+	cursor: pointer;
+	background: white;
+	color: black;
+	transition: background 0.3s ease, color 0.3s ease;
+}
+
+#event aside:hover {
+	background: black;
+	color: white;
+}
+
+#event button {
+	border: 1px solid black;
+	cursor: pointer;
+	margin-bottom: 6px;
+	display: block;
+	width: 400px;
+	text-align: left;
 }
 
 #game {
@@ -104,6 +152,8 @@ h1 {
 	display: inline-block;
 	margin: 5px;
 	padding: 0;
+	border: 1px solid black;
+	cursor: pointer;
 }
 
 #mats {
@@ -113,6 +163,7 @@ h1 {
 #mats article .text {
 	width: 100px;
 	display: inline-block;
+	vertical-align: top;
 }
 
 #mats article .text p {
@@ -122,6 +173,13 @@ h1 {
 #mats article .prices {
 	width: 450px;
 	display: inline-block;
+}
+
+#mats article .prices .pr {
+	width: 125px;
+	margin: 6px;
+	padding: 0;
+	text-align: center;
 }
 
 #mats article .prices button p {
@@ -153,7 +211,11 @@ h1 {
 }
 
 #upgs article button {
-	width: 50px;
+	width: 100px;
+}
+
+#upgs article .unl {
+	width: 100px;
 }
 
 #bank {
@@ -166,6 +228,12 @@ h1 {
 
 #bank article button {
 	width: 50px;
+}
+
+#bank article p .scr {
+	color: black;
+	text-decoration: none;
+	cursor: text;
 }
 
 #sets {

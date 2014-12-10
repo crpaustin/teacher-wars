@@ -34,15 +34,177 @@ function numCon($num) {
 	return $con;
 }
 
+/**
+ * Returns a material name from number
+ * @param  Integer $unl Material number
+ * @return String       Material name
+ */
 function getUnlock($unl) {
 	switch($unl) {
 		case 0: return 'Paper'; break;
 		case 1: return 'Pencil'; break;
 		case 2: return 'Pen'; break;
-		case 3: return 'Marker'; break;
-		case 4: return 'Highlighter'; break;
+		case 3: return 'Stapler'; break;
+		case 4: return 'Textbook'; break;
 		case 5: return 'Laptop'; break;
 	}
 }
 
+/**
+ * Returns a location name from number
+ * @param  Integer $loc Location number
+ * @return String       Location name
+ */
+function getLocation($loc) {
+	switch($loc) {
+		case 0: return 'Parking Lot'; break;
+		case 1: return 'Abandoned Classroom'; break;
+		case 2: return 'Teacher Workroom'; break;
+		case 3: return 'School Bookstore'; break;
+		case 4: return 'School Library'; break;
+		case 5: return 'Computer Lab'; break;
+	}
+}
+
+function doEventChance($unl) {
+	
+}
+
+/**
+ * Generate pseudo-random stocks
+ * @param  Integer $loc   Location reference
+ * @param  Boolean $event Is there an event?
+ * @param  Integer $type  What kind of event?
+ * @param  Integer $mat   What material is affected?
+ * @return Array          Pseudo-random stocks
+ */
+function genStocks($loc,$event,$type,$mat) {
+	$stocks = array();
+	for($i=0;$i<6;$i++) {
+		$min = 48/($i+1);
+		$max = 288/pow($i+2,2);
+		$rawStock = rand($min,$max);
+		if($event&&$mat==$i) {
+			switch($type) {
+				case 0:  $rawStock = floor($rawStock * 0.5);
+				case 1:  $rawStock = floor($rawStock * 2.0);
+				default: $rawStock = floor($rawStock * 0.5);
+			}
+		}
+		if($loc==$i){$rawStock = floor($rawStock * 1.4);}
+		$stocks[] = $rawStock;
+	}
+	return $stocks;
+}
+
+/**
+ * Generate pseudo-random prices
+ * @param  Boolean $event Is there an event?
+ * @param  Integer $type  What kind of event?
+ * @param  Integer $mat   What material is affected?
+ * @return Array          Pseudo-random prices
+ */
+function genPrices($event,$type,$mat) {
+	$prices = array();
+	for($i=0;$i<6;$i++) {
+		$min = 1  + (5 *pow(($i+1),3)) + ((600*$i)*($i/4));
+		$max = 10 + (15*pow(($i+1),3)) + ((350*$i)*($i/4));
+		$rawPrice = rand($min,$max);
+		if($event&&$mat==$i) {
+			switch($type) {
+				case 0:  $rawPrice = floor($rawPrice * 1.6);
+				case 1:  $rawPrice = floor($rawPrice * 0.5);
+				default: $rawPrice = floor($rawPrice * 1.6);
+			}
+		}
+		$prices[] = $rawPrice;
+	}
+	return $prices;
+}
+
+// **MATH STUFF**
+// Used for testing and balancing numbers
+/*
+echo '<table border="1" cellpadding="3">';
+for($i=0;$i<6;$i++) {
+	echo '<tr>';
+	echo '<td>Trial '.($i+1).'</td>';
+	$stocks = genStocks($i,false,0,0);
+	for($j=0;$j<6;$j++) {echo '<td>'.$stocks[$j].'</td>';}
+	echo '</tr>';
+}
+echo '<tr>';
+echo '<td>Averages</td>';
+for($i=0;$i<6;$i++) {
+	echo '<td>';
+	$total = 0;
+	for($j=0;$j<100;$j++){$total+=genStocks(6,false,0,0)[$i];}
+	$average = round($total / 100,0);
+	echo $average;
+	echo '</td>';
+}
+echo '</tr>';
+echo '</table>';
+
+echo '<br>';
+
+echo '<table border="1" cellpadding="3">';
+echo '<tr>';
+echo '<td>Min</td>';
+for($i=0;$i<6;$i++) {
+	echo '<td>';
+	$min = 1  + (5 *pow(($i+1),3)) + ((600*$i)*($i/4));
+	echo $min;
+	echo '</td>';
+}
+echo '<tr>';
+echo '<td>Max</td>';
+for($i=0;$i<6;$i++) {
+	echo '<td>';
+	$max = floor(10 + (15*pow(($i+1),3)) + ((350*$i)*($i/4)));
+	echo $max;
+	echo '</td>';
+}
+for($i=0;$i<6;$i++) {
+	echo '<tr>';
+	echo '<td>Trial '.($i+1).'</td>';
+	$prices = genPrices(false,0,0);
+	for($j=0;$j<6;$j++) {echo '<td>'.$prices[$j].'</td>';}
+	echo '</tr>';
+}
+echo '<tr>';
+echo '<td>Averages</td>';
+for($i=0;$i<6;$i++) {
+	echo '<td>';
+	$total = 0;
+	for($j=0;$j<100;$j++){$total+=genPrices(false,0,0)[$i];}
+	$average = round($total / 100,0);
+	echo $average;
+	echo '</td>';
+}
+echo '</tr>';
+echo '<tr>';
+echo '<td>Shortage of Pens</td>';
+for($i=0;$i<6;$i++) {
+	echo '<td>';
+	$total = 0;
+	for($j=0;$j<100;$j++){$total+=genPrices(true,0,2)[$i];}
+	$average = round($total / 100,0);
+	echo $average;
+	echo '</td>';
+}
+echo '</tr>';
+echo '<tr>';
+echo '<td>Surplus of Pens</td>';
+for($i=0;$i<6;$i++) {
+	echo '<td>';
+	$total = 0;
+	for($j=0;$j<100;$j++){$total+=genPrices(true,1,2)[$i];}
+	$average = round($total / 100,0);
+	echo $average;
+	echo '</td>';
+}
+echo '</tr>';
+echo '</table>';
+*/
 ?>

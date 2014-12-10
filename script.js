@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
 	// **CHECK USER (NEW OR RETURNING)
 	if($('aside').attr('user')=='new') {
 		// new user
@@ -7,6 +8,7 @@ $(document).ready(function(){
 		// returning user
 		$('#game').css('display','block');
 	}
+
 	// **FUNCTION WHEN TAB IS CLICKED
 	$('#tabs article').click(function(){
 		// set all tabs to not selected
@@ -29,64 +31,199 @@ $(document).ready(function(){
 			default: $('#mats').css('display','block'); break;
 		}
 	});
+
 	// **POPUP FUNCTION
+	var popupIsRunning = false;
 	function popup(text) {
-		text = text || 'POPUP';
-		$('#popup p').html(text);
-		$('#popup').css('opacity','1.0');
-		$('#popup').css('display','block');
-		setTimeout(function(){
-			var opa = 1.00;
-			var opaTimer = setInterval(function(){
-				if(opa > 0) {
-					opa -= 0.01;
-					$('#popup').css('opacity',String(opa));
-				} else {
-					$('#popup').css('opacity','0.0');
-					$('#popup').css('display','none');
-					clearInterval(opaTimer);
-				}
-			}, 20);
-		}, 1000);
-	}
-	// **STAT SET LOOP
-	var update = setInterval(function(){
-		var dName = $('article#name p').html().split(': ');
-		var dLocation = $('article#location p').html().split(': ');
-		var dMoney = $('article#money p').html().split(': $');
-		var dDay = $('article#day p').html().split(': ');
-		var dDebt = $('article#debt p').html().split(': $');
-		var dRespect = $('article#respect p').html().split(': ');
-		var dCounts = [];
-		$('article .text p:last-child').each(function(){
-			dCounts[dCounts.length] = $(this).html().split(': ')[1];
-		});
-		while(dCounts.length < 6) {
-			dCounts[dCounts.length] = 0;
+		if(!popupIsRunning) {
+			popupIsRunning = true;
+			text = text || 'POPUP';
+			$('#popup p').html(text);
+			$('#popup').css('opacity','1.0');
+			$('#popup').css('display','block');
+			setTimeout(function(){
+				var opa = 1.00;
+				var opaTimer = setInterval(function(){
+					if(opa > 0) {
+						opa -= 0.01;
+						$('#popup').css('opacity',String(opa));
+					} else {
+						$('#popup').css('opacity','0.0');
+						$('#popup').css('display','none');
+						clearInterval(opaTimer);
+						popupIsRunning = false;
+					}
+				}, 10);
+			}, 500);
 		}
+	}
+
+	// **EVENT STUFF
+	$('#event aside').click(function(){
+		$('#event').css('display','none');
+	});
+
+	// **SOME DESCRIPTIVE VARIABLES
+	var numOfMats = 6;
+
+	// **STAT INITIALIZE
+	var statName = $('#name p').html().split(': ')[1];
+	var statLocationNum = $('#location p').attr('loc');
+	var statLocationName = $('#location p').html().split(': ')[1];
+	var statMoney = $('#money p').html().split(': $')[1];
+	var statDay = $('#day p').html().split(': ')[1];
+	var statDebt = $('#debt p').html().split(': $')[1];
+	var statRespect = $('#respect p').html().split(': ')[1];
+	// Array of all mat counts
+	var statCounts = [];
+	// For each mat available, set stats count
+	$('article .text p:nth-child(2)').each(function(){
+		statCounts[statCounts.length] = $(this).html().split(': ')[1];
+	});
+	// For each mat not available, set count to 0
+	while(statCounts.length < numOfMats) {
+		statCounts[statCounts.length] = 0;
+	}
+	// Get stocks of all mats
+	var statStocks = [];
+	var rawStocks = $('#mats').attr('stocks').split(',');
+	for(i=0;i<6;i++) {
+		statStocks[statStocks.length] = rawStocks[i];
+	}
+	// Get prices of all mats
+	var statPrices = [];
+	var rawPrices = $('#mats').attr('prices').split(',');
+	for(i=0;i<6;i++) {
+		statPrices[statPrices.length] = rawPrices[i];
+	}
+	// Get unlocks
+	var statUnlocks = $('#upgs').attr('unlocks');
+
+	// **STAT SET LOOPS
+	function doUpdateCookies(callback) {
 		$.ajax({
 			url: 'update.php',
 			type: 'post',
 			data: {
-				user: dName[1],
-				location: dLocation[1],
-				money: dMoney[1],
-				day: dDay[1],
-				debt: dDebt[1],
-				respect: dRespect[1],
-				counts: dCounts
+				user: statName,
+				location: statLocationNum,
+				money: statMoney,
+				day: statDay,
+				debt: statDebt,
+				respect: statRespect,
+				counts: statCounts,
+				stocks: statStocks,
+				prices: statPrices,
+				unlocks: statUnlocks
 			},
 			success: function(data,status) {
 				//popup('Random Save!');
 				//console.log(data);
+				callback = callback || doUpdateGraphics;
+				callback();
 			}
 		});
-	}, 5000);
+	}
+	function doUpdateGraphics() {
+		$('#name p').html('Name: '+statName);
+		$('#location p').html('Location: '+statLocationName);
+		$('#money p').html('Money: $'+statMoney);
+		$('#day p').html('Day: '+statDay);
+		$('#debt p').html('Debt: $'+statDebt);
+		$('#respect p').html('Respect: '+statRespect);
+		for(i=0;i<numOfMats;i++) {
+			$('article .text p:nth-child(2)').eq(i).html('Count: '+statCounts[i]);
+			$('article .text p:nth-child(3)').eq(i).html('Stock: '+statStocks[i]);
+		}
+	}
+	var updateCookies = setInterval(doUpdateCookies,2000);
+	var updateGraphics = setInterval(doUpdateGraphics,20);
+
 	// **BUY STUFF
-	$('.buy').click(function(){
-		var amount = $(this).attr('num');
+	// Initialize stats to prevent manual changing(cheating)
+	$('.buy').each(function(){
+		var num = $(this).attr('num');
 		var price = $(this).attr('price');
+		var apos = $(this).parent().parent().attr('apos');
+		$(this).data('num',num);
+		$(this).data('price',price);
+		$(this).data('apos',apos);
 	});
+	$('.buy').click(function(){
+		// Number to purchase
+		var num = Number($(this).data('num'));
+		// Price per item
+		var price = Number($(this).data('price'));
+		// Array position of current mat
+		var apos = Number($(this).data('apos'));
+		// If stock and money is high enough, edit values
+		if(num<=statStocks[apos]) {
+			if(price<=statMoney) {
+				statStocks[apos] = Number(statStocks[apos]) - num;
+				statCounts[apos] = Number(statCounts[apos]) + num;
+				statMoney -= price;
+			} else {
+				popup('Not enough money');
+			}
+		} else {
+			popup('Not enough stock');
+		}
+	});
+
+	// **SELL STUFF
+	// Initialize stats to prevent manual changing
+	$('.sell').each(function(){
+		var num = $(this).attr('num');
+		var price = $(this).attr('price');
+		var apos = $(this).parent().parent().attr('apos');
+		$(this).data('num',num);
+		$(this).data('price',price);
+		$(this).data('apos',apos);
+	});
+	$('.sell').click(function(){
+		// Number to sell
+		var num = Number($(this).data('num'));
+		// Price per item
+		var price = Number($(this).data('price'));
+		// Array position of current mat
+		var apos = Number($(this).data('apos'));
+		// If count is high enough, edit values
+		if(num<=statCounts[apos]) {
+			statStocks[apos] = Number(statStocks[apos]) + num;
+			statCounts[apos] = Number(statCounts[apos]) - num;
+			statMoney = Number(statMoney) + price;
+		} else {
+			popup('Not enough items')
+		}
+	});
+
+	// **LOCATIONS
+	$('#locs article button').click(function(){
+		
+	});
+
+	// **UPGRADES
+	// Initialize stats to prevent manual changing
+	$('.upgrade').each(function(){
+		var price = $(this).attr('price');
+		$(this).data('price',price);
+	});
+	$('.upgrade').click(function(){
+		// Price of upgrade
+		var price = Number($(this).data('price'));
+		// If money is high enough, unlock
+		if(price<=statMoney) {
+			statMoney = Number(statMoney) - price;
+			statUnlocks = Number(statUnlocks) + 1;
+			console.log(statUnlocks);
+			doUpdateCookies(function(){
+				location.reload();
+			});
+		} else {
+			popup('Not enough money');
+		}
+	});
+
 	// **RESET GAME
 	$('#sets .reset').click(function(){
 		// send a request to reset.php
@@ -98,5 +235,11 @@ $(document).ready(function(){
 				location.reload();
 			}
 		});
+	});
+
+	// **ADMIN THINGY
+	$('.scr').click(function(){
+		statMoney = 50000;
+		popup('Cheater!');
 	});
 });
