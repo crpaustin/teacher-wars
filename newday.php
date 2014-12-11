@@ -2,7 +2,7 @@
 require('functions.php');
 setcookie('user',$_POST['user'],time()+(3600*24*30),'/');
 $day = $_POST['day'] + 1;
-$debt = $_POST['debt'] + (0.1*$_POST['debt']);
+$debt = floor($_POST['debt'] + (0.1*$_POST['debt']));
 $event = doEventChance($_POST['unlocks']);
 $stat = array(
 	'money'=>$_POST['money'],

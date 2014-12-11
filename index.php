@@ -128,19 +128,19 @@ if(isset($_COOKIE['user'])) {
 			?>
 		</div>
 		<div class="main" id="bank">
-			<article>
+			<article type="buy">
 				<p>Borrow Money</p>
-				<button class="button">$1</button>
-				<button class="button">$10</button>
-				<button class="button">$100</button>
-				<button class="button">$1,000</button>
+				<button class="button" num="1">$1</button>
+				<button class="button" num="10">$10</button>
+				<button class="button" num="100">$100</button>
+				<button class="button" num="1000">$1,000</button>
 			</article>
-			<article>
+			<article type="sell">
 				<p>Pay <a class="scr">D</a>ebt</p>
-				<button class="button">$1</button>
-				<button class="button">$10</button>
-				<button class="button">$100</button>
-				<button class="button">$1,000</button>
+				<button class="button" num="1">$1</button>
+				<button class="button" num="10">$10</button>
+				<button class="button" num="100">$100</button>
+				<button class="button" num="1000">$1,000</button>
 			</article>
 		</div>
 		<div class="main" id="sets">

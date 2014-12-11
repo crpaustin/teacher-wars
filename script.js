@@ -198,8 +198,31 @@ $(document).ready(function(){
 	});
 
 	// **LOCATIONS
+	$('#locs article').each(function(){
+		var loc = $(this).attr('loc');
+		$(this).data('loc',loc);
+	});
 	$('#locs article button').click(function(){
-		
+		var loc = $(this).parent().data('loc');
+		$.ajax({
+			url: 'newday.php',
+			type: 'post',
+			data: {
+				user: statName,
+				location: loc,
+				money: statMoney,
+				day: statDay,
+				debt: statDebt,
+				respect: statRespect,
+				counts: statCounts,
+				stocks: statStocks,
+				prices: statPrices,
+				unlocks: statUnlocks
+			},
+			success: function(data,status) {
+				location.reload();
+			}
+		});
 	});
 
 	// **UPGRADES
@@ -222,6 +245,17 @@ $(document).ready(function(){
 		} else {
 			popup('Not enough money');
 		}
+	});
+
+	// **BANK
+	$('#bank article button').each(function(){
+		var num = $(this).attr('num');
+		var type = $(this).parent().attr('type');
+		$(this).data('num',num);
+		$(this).data('type',type);
+	});
+	$('#bank article button').each(function(){
+		
 	});
 
 	// **RESET GAME
