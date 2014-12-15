@@ -17,5 +17,7 @@ $stat = array(
 	);
 $stat_enc = json_encode($stat);
 setcookie('stat',$stat_enc,time()+(3600*24*30),'/');
-header('Location: index.php');
+session_destroy();
+session_start();
+$_SESSION['event'] = $event;
 ?>

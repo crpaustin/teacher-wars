@@ -66,8 +66,45 @@ function getLocation($loc) {
 	}
 }
 
+// Event Types
+// 0 - Surplus of Material
+// 1 - Shortage of Material
+// 2 - Caught Dirty Dealing
+
 function doEventChance($unl) {
-	
+	$chance = ($unl * 10) - ($unl * 3);
+	$num = rand(1,100);
+	$event = array();
+	if($num <= $chance) {
+		$event[0] = true;
+		$chance2 = 100 - ((100 - $chance) / 2);
+		$num2 = rand(1,100);
+		if($num2 <= $chance) {
+			$event[1] = 2;
+			$min = 1  + (5 *pow(($unl),3)) + ((600*($unl-1))*(($unl-1)/4));
+			$max = 10 + (15*pow(($unl),3)) + ((350*($unl-1))*(($unl-1)/4));
+			$price = rand($min,$max);
+			$event[2] = $price;
+		} elseif($num2 <= $chance2) {
+			$event[1] = 1;
+			$event[2] = getRandomMaterial($unl);
+		} else {
+			$event[1] = 0;
+			$event[2] = getRandomMaterial($unl);
+		}
+	} else {
+		$event[0] = false;
+		$event[1] = 0;
+		$event[2] = 0;
+	}
+	return $event;
+}
+
+function getRandomMaterial($unl) {
+	$num = rand(1,($unl*10));
+	$mat = (int)ceil($num / 10);
+	$mat = $mat - 1;
+	return $mat;
 }
 
 /**

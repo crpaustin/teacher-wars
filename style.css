@@ -247,3 +247,11 @@ h1 {
 #sets article button {
 	width: 150px;
 }
+
+#lose {
+	display: none;
+}
+
+#win {
+	display: none;
+}

@@ -23,6 +23,13 @@ if(isset($_COOKIE['user'])) {
 	// Turn prices array into a string to be used by js
 	$prices_str = '';
 	for($i=0;$i<6;$i++){$prices_str.=$prices[$i].',';}
+	// Check for event
+	session_start();
+	if(isset($_SESSION['event'])) {
+		$event = json_encode($_SESSION['event']);
+	} else {
+		$event = '';
+	}
 } else {
 	// Set to new user
 	echo '<aside user="new"></aside>';
@@ -40,14 +47,13 @@ if(isset($_COOKIE['user'])) {
 	<div id="popup">
 		<p>Game Saved!</p>
 	</div>
-	<div id="event">
+	<div id="event" event="<?php echo $event ?>">
 		<article>
 			<h2>Event Name</h2>
 			<p>Event description. This will tell about whatever is happening. For now there is just this text. Sorry. Actually I'm not. It's my game, and I can do what I want.</p>
 			<aside>X</aside>
 			<button type="button">Action 1 - Something Long</button>
 			<button type="button">Action 2 - Something Longer</button>
-			<button type="button">Action 3 - Something Longest</button>
 		</article>
 	</div>
 	<div id="newuser">
@@ -149,6 +155,21 @@ if(isset($_COOKIE['user'])) {
 				<p>This cannot be undone.</p>
 			</article>
 		</div>
+	</div>
+	<div id="lose">
+		<h2>You have lost!</h2>
+		<p class="cause"></p>
+		<p class="day"></p>
+		<p class="money"></p>
+		<p class="debt"></p>
+		<button class="reset">New Game</button>
+	</div>
+	<div id="win">
+		<h2>You have won!</h2>
+		<p class="day">You survived 100 days without going bankrupt or being fired.</p>
+		<p class="money"></p>
+		<p class="debt"></p>
+		<button class="reset">New Game</button>
 	</div>
 </body>
 </html>
