@@ -320,20 +320,22 @@ $(document).ready(function(){
 
 	// **LOSE STATE
 	function checkLose() {
-		if(statMoney <= 0) {
-			var count = 0;
-			$('#mats article .text p:nth-child(2)').each(function(){
-				if($(this).html().split(': ')[1]>0) {
-					count++;
+		if($('aside').attr('user')!='new') {
+			if(statMoney <= 0) {
+				var count = 0;
+				$('#mats article .text p:nth-child(2)').each(function(){
+					if($(this).html().split(': ')[1]>0) {
+						count++;
+					}
+				});
+				if(count==0) {
+					doLose(0);
 				}
-			});
-			if(count==0) {
-				doLose(0);
+			} else if(statRespect<=0) {
+				doLose(1);
+			} else if(statDebt>=50000) {
+				doLose(2);
 			}
-		} else if(statRespect<=0) {
-			doLose(1);
-		} else if(statDebt>=50000) {
-			doLose(2);
 		}
 	}
 	function doLose(cause) {
